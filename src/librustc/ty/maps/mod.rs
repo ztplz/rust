@@ -456,7 +456,6 @@ define_maps! { <'tcx>
         ty::ParamEnv<'tcx>
     ) -> Clauses<'tcx>,
 
-    [] fn wasm_custom_sections: WasmCustomSections(CrateNum) -> Lrc<Vec<DefId>>,
     [] fn wasm_import_module_map: WasmImportModuleMap(CrateNum)
         -> Lrc<FxHashMap<DefId, String>>,
 }

@@ -29,7 +29,7 @@ use rustc::util::common::time;
 use rustc::util::fs::fix_windows_verbatim_for_gcc;
 use rustc::hir::def_id::CrateNum;
 use tempdir::TempDir;
-use rustc_target::spec::{PanicStrategy, RelroLevel, LinkerFlavor, TargetTriple};
+use rustc_target::spec::{PanicStrategy, RelroLevel, LinkerFlavor};
 use rustc_data_structures::fx::FxHashSet;
 use context::get_reloc_model;
 use llvm;
@@ -814,10 +814,8 @@ fn link_natively(sess: &Session,
         }
     }
 
-    if sess.opts.target_triple == TargetTriple::from_triple("wasm32-unknown-unknown") {
+    if sess.opts.target_triple.triple() == "wasm32-unknown-unknown" {
         wasm::rewrite_imports(&out_filename, &trans.crate_info.wasm_imports);
-        wasm::add_custom_sections(&out_filename,
-                                  &trans.crate_info.wasm_custom_sections);
     }
 }
 

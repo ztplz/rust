@@ -932,6 +932,7 @@ impl Linker for WasmLd {
     }
 
     fn gc_sections(&mut self, _keep_metadata: bool) {
+        self.cmd.arg("--gc-sections");
     }
 
     fn optimize(&mut self) {
@@ -964,7 +965,27 @@ impl Linker for WasmLd {
         // this isn't yet the bottleneck of compilation at all anyway.
         self.cmd.arg("--no-threads");
 
+        // By default LLD only gives us one page of stack (64k) which is a
+        // little small. Default to a larger stack closer to other PC platforms
+        // (1MB) and users can always inject their own link-args to override this.
         self.cmd.arg("-z").arg("stack-size=1048576");
+
+        // By default LLD's memory layout is:
+        //
+        // 1. First, a blank page
+        // 2. Next, all static data
+        // 3. Finally, the main stack (which grows down)
+        //
+        // This has the unfortunate consequence that on stack overflows you
+        // corrupt static data and can cause some exceedingly weird bugs. To
+        // help detect this a little sooner we instead request that the stack is
+        // placed before static data.
+        //
+        // This means that we'll generate slightly larger binaries as references
+        // to static data will take more bytes in the ULEB128 encoding, but
+        // stack overflow will be guaranteed to trap as it underflows instead of
+        // corrupting static data.
+        self.cmd.arg("--stack-first");
 
         // FIXME we probably shouldn't pass this but instead pass an explicit
         // whitelist of symbols we'll allow to be undefined. Unfortunately

@@ -1,6 +1,6 @@
 [submodule "src/llvm"]
 	path = src/llvm
-	url = https://github.com/rust-lang/llvm.git
+	url = https://github.com/alexcrichton/llvm.git
 	branch = master
 [submodule "src/jemalloc"]
 	path = src/jemalloc
@@ -52,4 +52,4 @@
 	url = https://github.com/rust-lang-nursery/stdsimd
 [submodule "src/tools/lld"]
 	path = src/tools/lld
-	url = https://github.com/rust-lang/lld.git
+	url = https://github.com/llvm-mirror/lld.git

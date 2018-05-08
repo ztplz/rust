@@ -324,7 +324,7 @@ Arguments:
                     paths,
                     test_args: matches.opt_strs("test-args"),
                     rustc_args: matches.opt_strs("rustc-args"),
-                    fail_fast: !matches.opt_present("no-fail-fast"),
+                    fail_fast: false,
                     doc_tests: if matches.opt_present("doc") {
                         DocTests::Only
                     } else if matches.opt_present("no-doc") {
